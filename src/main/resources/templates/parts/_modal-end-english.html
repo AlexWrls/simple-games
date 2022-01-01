@@ -1,0 +1,25 @@
+<div id="modalEnd" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="modal-end(english)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Время вышло</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/save-english" th:object="${english}">
+                    <div class="form-group">
+                        <label class="control-label" for="score-value">За этот раунд удалось набрать</label>
+                        <div class="col">
+                            <input type="text" class="form-control" readonly id="score-value" name="count"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-sm btn-secondary mt-2">Ok</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>

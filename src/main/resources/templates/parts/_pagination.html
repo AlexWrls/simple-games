@@ -1,0 +1,22 @@
+<nav aria-label="Page navigation example" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="pagination (numbers,page,url,size,sort)">
+    <ul class="pagination">
+        <li th:class="*{page.getNumber()}==0?'page-item disabled':'page-item'">
+            <a class="page-link"
+               th:href="@{*{url}}+'&page='+*{page.getNumber()-1}"
+               tabindex="-1">&#171;</a>
+        </li>
+
+               <div th:each="n, iter : *{numbers}" th:class="*{page.getNumber()}>*{iter.count-1}?((*{page.getTotalPages()}-*{iter.count-1})>4?'d-none':''):(*{page.getNumber()}<*{iter.count-4}?'d-none':'')">
+                    <li th:class="*{page.getNumber()}==*{iter.count-1}?'page-item active':'page-item'">
+                        <a class="page-link"
+                           th:href="@{*{url}}+'&page='+*{iter.count-1}"
+                           th:utext="*{iter.count}"> <span class="sr-only">(current)</span></a>
+                    </li>
+               </div>
+
+        <li th:class="*{page.getNumber()}==*{page.getTotalPages()-1}?'page-item disabled':'page-item'">
+            <a class="page-link"
+               th:href="@{*{url}}+'&page='+*{page.getNumber()+1}">&#187;</a>
+        </li>
+    </ul>
+</nav>

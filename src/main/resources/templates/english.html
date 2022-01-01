@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts/_head :: head(${title})"/>
+<body>
+<div class="container">
+    <button onclick="start()" id="start" class="btn btn-primary text-decoration-none">Start</button>
+    <button type="button" id="button-post" class="d-none" disabled data-bs-toggle="modal"
+            data-bs-target="#modalEnd">Enter
+    </button>
+    <div class="card">
+        <div class="card-body">
+            <span style="font-size: large">Time:</span><span style="font-size: large" id="timer"></span>
+            <span style="font-size: large">Score:</span><span style="font-size: large" id="score"></span>
+            <div>
+                <p>Управление:</p>
+                <ul>
+                    <li><b>For start</b> - click start</li>
+                    <li><b>Next</b> - turn button with true translate</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="root"/>
+
+</div>
+<div id="down"/>
+<!--modal windows-->
+<div th:replace="parts/_modal-end-english :: modal-end(${english})"></div>
+
+<script xmlns:th="http://www.w3.org/1999/xhtml" th:inline="javascript">
+    let words = [[${words}]];
+    let ans = {},
+        cardId = 0,
+        score = document.getElementById('score'),
+        scoreLevel = document.getElementById('score-value'),
+        timer = document.getElementById('timer'),
+        root = document.getElementById('root'),
+        counter = 60,
+        intervalId;
+
+    let wordList = [];
+    let rand = [];
+    score.innerText = 0;
+    scoreLevel.value = score.innerText;
+
+    const start = () => {
+        if (intervalId === undefined) {
+            playAudio('./sound/startM.mp3')
+            let input = document.getElementById('start'),
+                button = document.getElementById('button-post');
+            input.parentNode.removeChild(input)
+            button.className = 'btn btn-primary text-decoration-none'
+            if (Object.keys(ans).length === 0) {
+                ans = newSimple();
+            }
+            intervalId = setInterval(() => {
+                counter--;
+                timer.innerText = counter;
+                if (counter === 0) {
+                    button.disabled = null;
+                    playAudio('./sound/endM.mp3')
+                    clearInterval(intervalId)
+                }
+            }, 1000);
+
+        }
+    }
+
+    const playAudio = (path) => {
+        let audio = new Audio();
+        audio.src = (path);
+        audio.play();
+    }
+
+    const nextQuest = (t) => {
+        if (intervalId !== undefined && counter > 0) {
+            let card = document.getElementById(cardId);
+            if (t === ans.id) {
+                score.innerText = Math.round(score.innerText) + 1
+                card.style.background = '#00800087'
+            } else {
+                score.innerText = Math.round(score.innerText) - 1
+                card.style.background = '#a532329e'
+            }
+            cardId++
+            scoreLevel.value = score.innerText;
+            rand.forEach(item => {
+                if (item.innerText !== ans.translate) {
+                    item.className = 'btn-sm btn-secondaly text-decoration-none m-2'
+                }
+            });
+            ans = newSimple();
+            scrollDown();
+        }
+    }
+
+    const newSimple = () => {
+        let input = document.getElementById('input')
+        if (input !== null) {
+            input.parentNode.removeChild(input)
+        }
+        let answer = document.getElementsByClassName('d-none')
+        if (answer !== null) {
+            for (let i = 0; i < answer.length; i++) {
+                answer[i].className = ''
+            }
+        }
+
+        let createWord = document.createElement('span'),
+            createTranslate1 = document.createElement('button'),
+            createTranslate2 = document.createElement('button'),
+            createTranslate3 = document.createElement('button'),
+            createTranslate4 = document.createElement('button'),
+            card = document.createElement('div'),
+            cardHeader = document.createElement('div'),
+            cardBody = document.createElement('div');
+        card.className = 'card';
+        card.id = cardId
+        cardBody.className = 'card-body'
+        cardHeader.className = 'card-header';
+
+        wordList = [];
+        while (wordList.length < 4) {
+            wordList.push(randomWord(words, wordList));
+        }
+
+        let w = wordList[Math.floor(Math.random() * wordList.length)]
+        createWord.innerText = w.word;
+        rand = []
+        rand = [createTranslate1, createTranslate2, createTranslate3, createTranslate4]
+        for (let i = 0; i < rand.length; i++) {
+            const w = wordList[i]
+            rand[i].innerText = w.translate
+            rand[i].className = 'btn-sm btn-primary text-decoration-none m-2'
+            cardBody.appendChild(rand[i])
+            rand[i].setAttribute('onclick', 'nextQuest(' + w.id + ')');
+        }
+
+        cardHeader.appendChild(createWord);
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        root.appendChild(card);
+
+        return w
+    }
+
+    function randomWord(list1, list2) {
+        let w;
+        let f = false;
+        while (!f) {
+            let index = Math.floor(Math.random() * list1.length)
+            f = true;
+            w = list1[index];
+            list2.forEach(item => {
+                if (item.id === (index + 1)) {
+                    f = false;
+                }
+            });
+        }
+        return w;
+    }
+    function scrollDown() {
+        const element = document.getElementById('down');
+        element.scrollIntoView();
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts/_head :: head(${title})"/>
+<body>
+<div class="container">
+    <div th:include="parts/_nav-bar :: nav-bar(${title},${profile})"></div>
+    <div class="row row-cols-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <p>Матеша</p>
+                        <a type="button" th:href="@{/matesha}" class="btn-sm btn-primary text-decoration-none">Старт</a>
+                        <p>Мой рекорд</p>
+                        <p th:text="${maths}==null?'0':${maths.count}"></p>
+                        <p>Общий рейтинг</p>
+                        <a type="button" th:href="@{/best-maths}" class="btn-sm btn-primary text-decoration-none">Посмотреть</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <p>Змейка</p>
+                        <a type="button" th:href="@{/snake}" class="btn-sm btn-primary text-decoration-none">Старт</a>
+                        <p>Мой рекорд</p>
+                        <p th:text="${snake}==null?'0':${snake.count}"></p>
+                        <p>Общий рейтинг</p>
+                        <a type="button" th:href="@{/best-snake}" class="btn-sm btn-primary text-decoration-none">Посмотреть</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <p>Английский</p>
+                        <a type="button" th:href="@{/english}" class="btn-sm btn-primary text-decoration-none">Старт</a>
+                        <p>Мой рекорд</p>
+                        <p th:text="${english}==null?'0':${english.count}"></p>
+                        <p>Общий рейтинг</p>
+                        <a type="button" th:href="@{/best-english}" class="btn-sm btn-primary text-decoration-none">Посмотреть</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <p class="text-center">Текст</p>
+                    <p class="text-center">Текст</p>
+                    <p class="text-center">Текст</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

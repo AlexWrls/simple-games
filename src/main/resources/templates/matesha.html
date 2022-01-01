@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts/_head :: head(${title})"/>
+<body>
+<div class="container">
+    <button onclick="start()" id="start" class="btn btn-primary text-decoration-none">Start</button>
+    <button type="button" id="button-post" class="d-none" disabled data-bs-toggle="modal"
+            data-bs-target="#modalEnd">Enter
+    </button>
+    <div class="card">
+        <div class="card-body">
+            <span style="font-size: large">Time:</span><span style="font-size: large" id="timer"></span>
+            <span style="font-size: large">Score:</span><span style="font-size: large" id="score"></span>
+            <div>
+                <label for="level" class="my-1 mr-2">level</label>
+                <select class="form-control form-control-sm ml-2 mr-2" id="level">
+                    <option>10</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <p>Управление:</p>
+                <ul>
+                    <li><b>For start</b> - click start</li>
+                    <li><b>Next</b> - turn enter</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="root"/>
+
+
+</div>
+<!--modal windows-->
+<div th:replace="parts/_modal-end-matesha :: modal-end(${maths})"></div>
+
+<script>
+    let ans,
+        level,
+        score = document.getElementById('score'),
+        scoreLevel = document.getElementById('score-value'),
+        timer = document.getElementById('timer'),
+        counter = 60,
+        intervalId;
+
+    score.innerText = 0;
+    scoreLevel.value = score.innerText;
+
+    const start = () => {
+        if (intervalId === undefined) {
+            playAudio('./sound/startM.mp3')
+            let input = document.getElementById('start'),
+                button = document.getElementById('button-post');
+            input.parentNode.removeChild(input)
+            button.className = 'btn btn-primary text-decoration-none'
+            level = document.getElementById('level').value
+            if (ans === undefined) {
+                ans = newSimple();
+            }
+            intervalId = setInterval(() => {
+                counter--;
+                timer.innerText = counter;
+                if (counter === 0) {
+                    button.disabled = null;
+                    playAudio('./sound/endM.mp3')
+                    clearInterval(intervalId)
+                }
+            }, 1000);
+
+        }
+    }
+
+    const playAudio = (path) => {
+        let audio = new Audio();
+        audio.src = (path);
+        audio.play();
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.keyCode === 13 && intervalId !== undefined && counter > 0) {
+            const input = document.getElementById('input')
+            if (ans === undefined) {
+                ans = newSimple();
+                return
+            }
+            if (ans.innerText === input.value) {
+                score.innerText = Math.round(score.innerText) + 1
+                let yourA = document.createElement('span')
+                yourA.innerText = 'V'
+                yourA.style.color = 'green'
+                yourA.style.marginLeft = '10px'
+                ans.appendChild(yourA)
+            } else {
+                let yourA = document.createElement('span')
+                yourA.innerText = input.value
+                yourA.style.color = 'red'
+                yourA.style.marginLeft = '10px'
+                ans.appendChild(yourA)
+            }
+            scoreLevel.value = score.innerText;
+            ans = newSimple();
+        }
+    });
+
+    const newSimple = () => {
+        let input = document.getElementById('input')
+        if (input !== null) {
+            input.parentNode.removeChild(input)
+        }
+        let answer = document.getElementsByClassName('d-none')
+        if (answer !== null) {
+            for (let i = 0; i < answer.length; i++) {
+                answer[i].className = ''
+            }
+        }
+        const root = document.getElementById('root');
+        let cardBody = document.createElement("div"),
+            card = document.createElement("div"),
+            a = document.createElement('span'),
+            fun = document.createElement('span'),
+            b = document.createElement('span'),
+            z = document.createElement('span'),
+            ans = document.createElement('span'),
+            sw = document.createElement('input');
+
+        sw.type = 'text'
+        sw.id = 'input'
+        ans.className = 'd-none'
+        card.className = 'card'
+        cardBody.className = 'card-body'
+
+        a.innerText = Math.round(Math.random() * level)
+        b.innerText = Math.round(Math.random() * level)
+        z.innerText = ' = '
+        if (Math.round(Math.random() * 100) > 50) {
+            fun.innerText = ' - '
+            ans.innerText = Math.round(a.innerText) - Math.round(b.innerText);
+        } else {
+            fun.innerText = ' + '
+            ans.innerText = Math.round(a.innerText) + Math.round(b.innerText);
+        }
+
+        cardBody.appendChild(a)
+        cardBody.appendChild(fun)
+        cardBody.appendChild(b)
+        cardBody.appendChild(z)
+        cardBody.appendChild(ans)
+        cardBody.appendChild(sw)
+        card.appendChild(cardBody)
+        root.appendChild(card);
+        sw.focus();
+        return ans
+    }
+</script>
+
+
+</body>
+</html>
+

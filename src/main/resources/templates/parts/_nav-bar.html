@@ -1,0 +1,13 @@
+<div class="container" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="nav-bar(title,profile)">
+    <div class="topnav">
+        <a th:class="*{title}=='Main'?'active':''" th:href="@{/main}">Main</a>
+        <a th:class="*{title}=='Record'?'active':''" href="#">Record</a>
+        <a href="#" th:text="'Name: ' + ${profile.email}"></a>
+        <a href="#" th:text="'Credit: ' + ${profile.credit}"></a>
+        <form th:action="@{/logout}" class="form-inline" method="post">
+
+            <input type="submit" class="btn-sm btn-secondary mb-0 mt-0" value="Выйти"/>
+        </form>
+    </div>
+
+</div>

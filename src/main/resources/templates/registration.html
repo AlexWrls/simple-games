@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/>
+<body>
+<div class="container">
+    <div class="card" style="max-width: 600px;margin-left: auto;margin-right: auto;margin-top: 15% " >
+        <div class="card-header">
+           <h5>Регистрация</h5>
+        </div>
+        <form th:action="@{/registration}" th:object="${profile}" method="post">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="email">Имя</label>
+                    <input type="text" th:class="${#fields.hasErrors('email')}?'form-control is-invalid':'form-control'"
+                           th:field="*{email}" id="email" name="email" placeholder="введите почту"></input>
+                    <span class="invalid-feedback" th:if="${#fields.hasErrors('email')}"
+                          th:errors="*{email}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" th:field="*{password}"
+                           th:class="${#fields.hasErrors('password')}?'form-control is-invalid':'form-control'" name="password"
+                           id="password" placeholder="введите пароль"></input>
+                    <span class="invalid-feedback" th:if="${#fields.hasErrors('password')}"
+                          th:errors="*{password}"></span>
+                </div>
+                <div class="form-group">
+                    <label for="passwordConfirm">Повторите пароль</label>
+                    <input type="password"
+                           th:class="${passwordError}?'form-control is-invalid':(${password2Error}?'form-control is-invalid':'form-control')"
+                           name="passwordConfirm" id="passwordConfirm" placeholder="Повторите пароль"></input>
+                    <span class="invalid-feedback" th:if="${passwordError}" th:text="${passwordError}"></span>
+                    <span class="invalid-feedback" th:if="${password2Error}" th:text="${password2Error}"></span>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <input type="submit" class="btn-sm btn-success" value="Зареристрироваться">
+                <a href="/login" type="button" class="btn-sm btn-secondary text-decoration-none">Назад</a>
+                <span class="text-info" th:if="${message}" th:text="${message}"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
