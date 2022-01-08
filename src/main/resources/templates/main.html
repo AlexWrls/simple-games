@@ -50,9 +50,13 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <p class="text-center">Текст</p>
-                    <p class="text-center">Текст</p>
-                    <p class="text-center">Текст</p>
+                    <div class="text-center">
+                        <p>Мой Словарик</p>
+                        <a type="button" th:href="@{/book}" class="btn-sm btn-primary text-decoration-none">Open</a>
+                        <p>Всего слов</p>
+                        <p th:text="${english}==null?'0':${english.count}"></p>
+                        
+                    </div>
                 </div>
             </div>
         </div>

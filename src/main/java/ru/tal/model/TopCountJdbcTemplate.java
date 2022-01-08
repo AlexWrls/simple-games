@@ -23,7 +23,6 @@ public class TopCountJdbcTemplate {
         String query = String.format("SELECT  rg.id, p.email, rg.count from result_game rg " +
                 "join profile p on rg.id_profile = p.id WHERE rg.type_game = '%s' " +
                 "order by rg.count desc limit 10", gameType.name());
-        System.out.println(query);
         return jdbcTemplate.query(query, (rs, rowNum) -> mapTopCount(rs));
     }
 

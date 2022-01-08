@@ -24,21 +24,29 @@ create table public.words
 
 create table public.result_game
 (
-    id         BIGSERIAL not null primary key,
-    id_profile bigint    not null,
-    type_game varchar(50) not null ,
+    id         BIGSERIAL   not null primary key,
+    id_profile bigint      not null,
+    type_game  varchar(50) not null,
     count      integer default 0,
     constraint english_fk foreign key (id_profile) references public.profile (id) on UPDATE cascade on DELETE cascade
 );
+create table public.book
+(
+    id         Bigserial    not null primary key,
+    id_profile bigint       not null,
+    word       varchar(100) not null,
+    translate  varchar(100) not null,
+    constraint book_fk foreign key (id_profile) references public.profile (id) on UPDATE cascade on DELETE cascade
+);
 
-ALTER TABLE public.profile
-    OWNER TO abnkxgdxakdjgr;
-ALTER TABLE public.role
-    OWNER TO abnkxgdxakdjgr;
-ALTER TABLE public.words
-    OWNER TO abnkxgdxakdjgr;
-ALTER TABLE public.result_game
-    OWNER TO abnkxgdxakdjgr;
+-- ALTER TABLE public.profile
+--     OWNER TO abnkxgdxakdjgr;
+-- ALTER TABLE public.role
+--     OWNER TO abnkxgdxakdjgr;
+-- ALTER TABLE public.words
+--     OWNER TO abnkxgdxakdjgr;
+-- ALTER TABLE public.result_game
+--     OWNER TO abnkxgdxakdjgr;
 
 -- ================== INSERT ==========================
 

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="parts/_head :: head(${title})"/>
+<body>
+<div class="container">
+
+    <div th:include="parts/_nav-bar :: nav-bar(${title},${profile})"></div>
+
+    <div class="row row-cols-2">
+        <div class="col">
+            <div class="card">
+                <div class="card-body" id="form-word">
+
+                    <div><a href="#" id="addBook" class="btn-sm btn-primary" type="submit"
+                            onclick="addBook()">Сохранить</a></div>
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" name="word" required class="form-control" placeholder="слово">
+                        </div>
+                        <div class="col">
+                            <input type="text" name="translate" required class="form-control" placeholder="перевод">
+                        </div>
+                        <div class="col">
+                            <span class="btn-sm btn-success text-center" type="button" onclick="addInput()">+</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <input type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    function addInput() {
+        let form = document.getElementById('form-word');
+        let row = document.createElement('div');
+        let cols = []
+        for (let i = 0; i < 3; i++) {
+            cols[i] = document.createElement('div');
+            cols[i].className = 'col'
+        }
+        let inW = document.createElement('input');
+        let inT = document.createElement('input');
+
+        row.className = 'row'
+        inW.className = 'form-control'
+        inW.name = 'word'
+        inW.placeholder = 'слово'
+        inT.className = 'form-control'
+        inT.placeholder = 'перевод'
+        inT.name = 'translate'
+
+        row.appendChild(cols[0])
+        cols[0].appendChild(inW)
+        row.appendChild(cols[1])
+        cols[1].appendChild(inT)
+        row.appendChild(cols[2])
+        form.appendChild(row)
+    }
+
+    function addBook() {
+        let a = document.getElementById('addBook')
+        let word = document.getElementsByName('word');
+        let translate = document.getElementsByName('translate');
+        let str = ''
+        for (let i = 0; i < word.length; i++) {
+            if (word[i].value !== '' && translate[i].value !== '') {
+                str = str + word[i].value + '-' + translate[i].value + '$'
+            }
+        }
+        const param = str.substring(0, str.length - 1);
+        if (param!==''){
+            a.href = '/save-book?param=' + param
+        }
+    }
+</script>
+</body>
+</html>

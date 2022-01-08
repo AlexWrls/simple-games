@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tal.entity.ResultGame;
 import ru.tal.service.GameType;
 
@@ -20,6 +21,7 @@ public class ResultGameRepo {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Transactional
     public ResultGame getByGameTypeAndIdProfile(GameType gameType, long idProfile) {
         try {
             String query = String.format("SELECT rg.id,rg.id_profile,rg.type_game,rg.count FROM public.result_game as rg " +
@@ -43,7 +45,7 @@ public class ResultGameRepo {
             throw new RuntimeException(e.getMessage());
         }
     }
-
+    @Transactional
     public void save(ResultGame resultGame) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("count", resultGame.getCount())

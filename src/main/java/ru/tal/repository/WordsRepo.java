@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tal.entity.Words;
 
 import java.sql.PreparedStatement;
@@ -35,14 +36,13 @@ public class WordsRepo {
         return namedParameterJdbcTemplate.query(query, (rs, rowNum) -> map(rs));
     }
 
+    @Transactional
     public void insertListWords(final List<Words> wordsList) {
 
-        String sql = "INSERT INTO "
-                + "public.words "
-                + "(word,translate) "
-                + "VALUES " + "(?,?)";
+        String query = "INSERT INTO public.words (word,translate) "
+                + "VALUES (?,?)";
 
-        this.jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+        this.jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
 
             @Override
             public void setValues(PreparedStatement ps, int i)

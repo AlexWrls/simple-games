@@ -3,16 +3,20 @@ package ru.tal.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.tal.entity.Book;
 import ru.tal.entity.Profile;
 import ru.tal.entity.ResultGame;
 import ru.tal.entity.Words;
 import ru.tal.model.TopCount;
 import ru.tal.model.TopCountJdbcTemplate;
+import ru.tal.repository.BookRepo;
 import ru.tal.repository.GameRepo;
 import ru.tal.repository.ProfileRepo;
 import ru.tal.repository.ResultGameRepo;
 import ru.tal.repository.WordsRepo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -23,14 +27,16 @@ public class MainService {
     private final ResultGameRepo gameRepo;
     private final WordsRepo wordsRepo;
     private final GameRepo gameRepoJpa;
+    private final BookRepo bookRepo;
 
     @Autowired
-    public MainService(ProfileRepo profileRepo, TopCountJdbcTemplate mathsJdbcTemplate, ResultGameRepo gameRepo, WordsRepo wordsRepo, GameRepo gameRepoJpa) {
+    public MainService(ProfileRepo profileRepo, TopCountJdbcTemplate mathsJdbcTemplate, ResultGameRepo gameRepo, WordsRepo wordsRepo, GameRepo gameRepoJpa, BookRepo bookRepo) {
         this.profileRepo = profileRepo;
         this.topCountRepo = mathsJdbcTemplate;
         this.gameRepo = gameRepo;
         this.wordsRepo = wordsRepo;
         this.gameRepoJpa = gameRepoJpa;
+        this.bookRepo = bookRepo;
     }
 
     public Profile getProfileById(long id) {
@@ -63,8 +69,8 @@ public class MainService {
             gameRepoJpa.save(profileResult);
             profileRepo.save(profile);
         } catch (Exception e) {
-            log.error("Ошибка сохранения результатов : " + e.getMessage());
-            throw new RuntimeException("Ошибка сохранения результатов змейки: " + e.getMessage());
+            log.error("Ошибка сохранения результатов: " + e.getMessage());
+            throw new RuntimeException("Ошибка сохранения результатов: " + e.getMessage());
         }
     }
 
@@ -79,4 +85,24 @@ public class MainService {
     public void insertListWord(List<Words> wordsList) {
         wordsRepo.insertListWords(wordsList);
     }
+
+    public void insetListBook(String param, Profile profile) {
+        List<Book> books = new ArrayList<>();
+        if (param.contains("$")) {
+            final String[] split = param.split("\\$");
+            Arrays.stream(split).forEach(str -> addStr(books, str));
+        } else {
+            addStr(books, param);
+        }
+        bookRepo.saveListBook(books, profile.getId());
+    }
+
+    private void addStr(List<Book> books, String param) {
+        String[] sp = param.split("-");
+        Book book = new Book();
+        book.setWord(sp[0]);
+        book.setTranslate(sp[1]);
+        books.add(book);
+    }
+
 }

@@ -39,7 +39,7 @@ public class RegistrationService implements UserDetailsService {
         Profile accountFormDb = profileRepo.getByEmail(email);
 
         if (accountFormDb != null) {
-            log.warn("Профиль по этим email уже существует");
+            log.warn("Профиль по этим именем уже существует");
             return false;
         }
         profile.setRole(Collections.singleton(Role.USER));
