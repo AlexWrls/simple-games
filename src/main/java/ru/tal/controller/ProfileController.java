@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.tal.entity.Book;
 import ru.tal.entity.Profile;
 import ru.tal.entity.ResultGame;
 import ru.tal.entity.Words;
@@ -114,8 +115,10 @@ public class ProfileController {
     @GetMapping("/book")
     public String book(@AuthenticationPrincipal Profile profile, Model model) {
         Profile getProfile = mainService.getProfileById(profile.getId());
+        List<Book> books = mainService.getAllBookByIdProfile(getProfile.getId());
         model.addAttribute("title", "Record");
         model.addAttribute("profile", getProfile);
+        model.addAttribute("books", books);
         return "book";
     }
 

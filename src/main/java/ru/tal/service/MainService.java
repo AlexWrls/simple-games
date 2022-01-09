@@ -105,4 +105,8 @@ public class MainService {
         books.add(book);
     }
 
+    public List<Book> getAllBookByIdProfile(long idProfile) {
+        return bookRepo.getAllByIdProfile(idProfile);
+    }
+
 }

@@ -3,44 +3,102 @@
 <head th:include="parts/_head :: head(${title})"/>
 <body>
 <div class="container">
-
     <div th:include="parts/_nav-bar :: nav-bar(${title},${profile})"></div>
 
-    <div class="row row-cols-2">
-        <div class="col">
-            <div class="card">
-                <div class="card-body" id="form-word">
-
-                    <div><a href="#" id="addBook" class="btn-sm btn-primary" type="submit"
-                            onclick="addBook()">Сохранить</a></div>
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" name="word" required class="form-control" placeholder="слово">
-                        </div>
-                        <div class="col">
-                            <input type="text" name="translate" required class="form-control" placeholder="перевод">
-                        </div>
-                        <div class="col">
-                            <span class="btn-sm btn-success text-center" type="button" onclick="addInput()">+</span>
-                        </div>
-                    </div>
-
+    <div class="card">
+        <div class="card-body" id="form-word">
+            <div><a href="#" id="addBook" class="btn-sm btn-primary" type="button"
+                    onclick="addBook()">Сохранить</a></div>
+            <div class="row mt-2">
+                <div class="col">
+                    <input type="text" name="word" required class="form-control" placeholder="слово">
                 </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <div class="text-center">
-                        <input type="text">
-                    </div>
+                <div class="col">
+                    <input type="text" name="translate" required class="form-control" placeholder="перевод">
+                </div>
+                <div class="col">
+                    <button class="btn-sm btn-success text-center" type="button" onclick="addInput()">+</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="card">
+        <div class="card-body">
+            <div class="text-center">
+                <div id="listingTable"></div>
+                <a href="javascript:prevPage()" class="btn-sm btn-secondary text-center" type="button"
+                   id="btn_prev">Prev</a>
+                <a href="javascript:nextPage()" class="btn-sm btn-secondary text-center" type="button"
+                   id="btn_next">Next</a>
+                page: <span id="page"></span>
+            </div>
+        </div>
+    </div>
+
 </div>
-<script>
+<script xmlns:th="http://www.w3.org/1999/xhtml" th:inline="javascript">
+
+    let current_page = 1;
+    let records_per_page = 8;
+
+    let objJson = [[${books}]];
+
+    window.onload = function () {
+        changePage(1);
+    };
+
+    function prevPage() {
+        if (current_page > 1) {
+            current_page--;
+            changePage(current_page);
+        }
+    }
+
+    function nextPage() {
+        if (current_page < numPages()) {
+            current_page++;
+            changePage(current_page);
+        }
+    }
+
+    function changePage(page) {
+        let btn_next = document.getElementById("btn_next");
+        let btn_prev = document.getElementById("btn_prev");
+        let listing_table = document.getElementById("listingTable");
+        let page_span = document.getElementById("page");
+
+        // Validate page
+        if (page < 1) page = 1;
+        if (page > numPages()) page = numPages();
+
+        listing_table.innerHTML = "";
+
+        for (let i = (page - 1) * records_per_page; i < (page * records_per_page); i++) {
+            if (i < objJson.length) {
+                listing_table.innerHTML += objJson[i].word + ' - ' + objJson[i].translate + "<hr>";
+            }
+        }
+        page_span.innerHTML = page;
+
+        if (page === 1) {
+            btn_prev.style.visibility = "hidden";
+        } else {
+            btn_prev.style.visibility = "visible";
+        }
+
+        if (page === numPages()) {
+            btn_next.style.visibility = "hidden";
+        } else {
+            btn_next.style.visibility = "visible";
+        }
+    }
+
+    function numPages() {
+        return Math.ceil(objJson.length / records_per_page);
+    }
+
+
     function addInput() {
         let form = document.getElementById('form-word');
         let row = document.createElement('div');
@@ -52,7 +110,7 @@
         let inW = document.createElement('input');
         let inT = document.createElement('input');
 
-        row.className = 'row'
+        row.className = 'row mt-2'
         inW.className = 'form-control'
         inW.name = 'word'
         inW.placeholder = 'слово'
@@ -79,7 +137,7 @@
             }
         }
         const param = str.substring(0, str.length - 1);
-        if (param!==''){
+        if (param !== '') {
             a.href = '/save-book?param=' + param
         }
     }

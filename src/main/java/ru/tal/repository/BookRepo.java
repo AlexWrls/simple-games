@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tal.entity.Book;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -38,5 +39,23 @@ public class BookRepo {
                 return books.size();
             }
         });
+    }
+
+    public List<Book> getAllByIdProfile(long idProfile) {
+        String query = String.format("SELECT b.id,b.id_profile,b.word,b.translate FROM public.book as b WHERE b.id_profile = '%s'", idProfile);
+        return jdbcTemplate.query(query, ((rs, row) -> map(rs)));
+    }
+
+    private Book map(ResultSet res) {
+        try {
+            Book book = new Book();
+            book.setId(res.getLong("id"));
+            book.setIdProfile(res.getLong("id_profile"));
+            book.setWord(res.getString("word"));
+            book.setTranslate(res.getString("translate"));
+            return book;
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
