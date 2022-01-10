@@ -108,5 +108,8 @@ public class MainService {
     public List<Book> getAllBookByIdProfile(long idProfile) {
         return bookRepo.getAllByIdProfile(idProfile);
     }
+    public int getCountBookByIdProfile(long idProfile){
+        return bookRepo.count(idProfile);
+    }
 
 }

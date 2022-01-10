@@ -144,21 +144,22 @@
         return w
     }
 
-    function randomWord(list1, list2) {
+    const randomWord = (list1, list2) => {
         let w;
         let f = false;
         while (!f) {
             let index = Math.floor(Math.random() * list1.length)
             f = true;
             w = list1[index];
-            list2.forEach(item => {
-                if (item.id === (index + 1)) {
+            for (let i = 0; i < list2.length; i++) {
+                if (list2[i].id === w.id) {
                     f = false;
                 }
-            });
+            }
         }
         return w;
     }
+
     function scrollDown() {
         const element = document.getElementById('down');
         element.scrollIntoView();

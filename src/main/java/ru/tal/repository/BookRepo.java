@@ -46,6 +46,11 @@ public class BookRepo {
         return jdbcTemplate.query(query, ((rs, row) -> map(rs)));
     }
 
+    public Integer count(long idProfile){
+        String query = String.format("SELECT count(*) FROM public.book as b WHERE b.id_profile = '%s'",idProfile);
+        return  jdbcTemplate.queryForObject(query, Integer.class);
+    }
+
     private Book map(ResultSet res) {
         try {
             Book book = new Book();

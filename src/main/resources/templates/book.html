@@ -6,6 +6,12 @@
     <div th:include="parts/_nav-bar :: nav-bar(${title},${profile})"></div>
 
     <div class="card">
+        <div class="card-header">
+            <div style="display: flex;right: 0">
+                <a th:href="@{english-book}" th:class="${isGame}?'btn-sm btn-primary text-center':'d-none'" type="button">Game</a>
+            </div>
+            <p th:class="${isGame}?'d-none':''">Добавьте 5 или более слов</p>
+        </div>
         <div class="card-body" id="form-word">
             <div><a href="#" id="addBook" class="btn-sm btn-primary" type="button"
                     onclick="addBook()">Сохранить</a></div>

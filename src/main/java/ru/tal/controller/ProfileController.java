@@ -36,6 +36,7 @@ public class ProfileController {
         model.addAttribute("maths", mainService.resultGame(MATESHA, getProfile.getId()));
         model.addAttribute("snake", mainService.resultGame(SNAKE, getProfile.getId()));
         model.addAttribute("english", mainService.resultGame(ENGLISH, getProfile.getId()));
+        model.addAttribute("countBook", mainService.getCountBookByIdProfile(getProfile.getId()));
         model.addAttribute("profile", getProfile);
         model.addAttribute("title", "Main");
         return "main";
@@ -119,6 +120,7 @@ public class ProfileController {
         model.addAttribute("title", "Record");
         model.addAttribute("profile", getProfile);
         model.addAttribute("books", books);
+        model.addAttribute("isGame", mainService.getCountBookByIdProfile(getProfile.getId()) > 4);
         return "book";
     }
 
@@ -126,6 +128,15 @@ public class ProfileController {
     public String saveWord(@AuthenticationPrincipal Profile profile, @RequestParam String param) {
         mainService.insetListBook(param, profile);
         return "redirect:/book";
+    }
+
+    @GetMapping("english-book")
+    public String englishWithMyBook(@AuthenticationPrincipal Profile profile, Model model, ResultGame resultGame) {
+        List<Book> books = mainService.getAllBookByIdProfile(profile.getId());
+        model.addAttribute("words", books);
+        model.addAttribute("title", "English");
+        model.addAttribute("english", resultGame);
+        return "english";
     }
 
 //    @SneakyThrows

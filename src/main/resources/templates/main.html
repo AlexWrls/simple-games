@@ -54,8 +54,8 @@
                         <p>Мой Словарик</p>
                         <a type="button" th:href="@{/book}" class="btn-sm btn-primary text-decoration-none">Open</a>
                         <p>Всего слов</p>
-                        <p th:text="${english}==null?'0':${english.count}"></p>
-                        
+                        <p th:text="${countBook}"></p>
+
                     </div>
                 </div>
             </div>
